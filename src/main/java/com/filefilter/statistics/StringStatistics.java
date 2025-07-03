@@ -1,22 +1,14 @@
 package com.filefilter.statistics;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StringStatistics implements Statistics {
+    private static final Logger log = LoggerFactory.getLogger(StringStatistics.class);
+
     private int count = 0;
     private int minLen = Integer.MAX_VALUE;
     private int maxLen = Integer.MIN_VALUE;
-
-    // Добавьте вот эти геттеры:
-    public int getCount() {
-        return count;
-    }
-
-    public int getMinLength() {
-        return count > 0 ? minLen : 0;
-    }
-
-    public int getMaxLength() {
-        return count > 0 ? maxLen : 0;
-    }
 
     @Override
     public void addValue(String value) {
@@ -28,16 +20,22 @@ public class StringStatistics implements Statistics {
 
     @Override
     public void printShort() {
-        System.out.println("Количество: " + count);
+        log.info("Количество строк: {}", count);
     }
 
     @Override
     public void printFull() {
-        System.out.println("Количество: " + count);
+        log.info("Количество строк: {}", count);
         if (count > 0) {
-            System.out.println("Минимальная длина строки: " + minLen);
-            System.out.println("Максимальная длина строки: " + maxLen);
+            log.info("Минимальная длина строки: {}", minLen);
+            log.info("Максимальная длина строки: {}", maxLen);
+        } else {
+            log.info("Нет данных для статистики строк");
         }
     }
+
+    public int getCount() { return count; }
+    public int getMinLength() { return count > 0 ? minLen : 0; }
+    public int getMaxLength() { return count > 0 ? maxLen : 0; }
 }
 

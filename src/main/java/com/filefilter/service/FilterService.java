@@ -1,8 +1,7 @@
 package com.filefilter.service;
 
-import com.filefilter.detector.FileType;
 import com.filefilter.detector.TypeDetector;
-import com.filefilter.exeption.AllFilesFailedException;
+import com.filefilter.exception.AllFilesFailedException;
 import com.filefilter.statistics.NumberStatistics;
 import com.filefilter.statistics.Statistics;
 import com.filefilter.statistics.StringStatistics;
@@ -13,7 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,19 +44,17 @@ public class FilterService {
 
         boolean anySuccess = false;
 
+        //  чтение входных файлов
         for (String filename : inputFiles) {
             log.info("Читаем файл {}", filename);
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
                 boolean thisFileHadData = false;
                 while ((line = reader.readLine()) != null) {
-                    if (line.trim().isEmpty()) continue;  // пропускаем пустые
-
+                    if (line.trim().isEmpty()) continue;
                     thisFileHadData = true;
                     anySuccess = true;
-
-                    FileType type = TypeDetector.detectType(line);
-                    switch (type) {
+                    switch (TypeDetector.detectType(line)) {
                         case INTEGER -> {
                             integers.add(line);
                             intStats.addValue(line);
@@ -84,13 +81,18 @@ public class FilterService {
             throw new AllFilesFailedException("Ни один файл не прочитан или все файлы пусты");
         }
 
-        // Запись
-        writeCategory(integers, "integers.txt");
-        writeCategory(floats,   "floats.txt");
-        writeCategory(strings,  "strings.txt");
+        //  Обёртка для записи, чтобы поймать любые UncheckedIOException
+        try {
+            writeCategory(integers, "integers.txt");
+            writeCategory(floats,   "floats.txt");
+            writeCategory(strings,  "strings.txt");
+        } catch (UncheckedIOException e) {
+            log.error("Ошибка при записи выходных файлов: {}", e.getMessage());
+            System.exit(3);
+        }
 
-        // Статистика
-        printStats("целых чисел",      intStats);
+        //  вывод статистики
+        printStats("целых чисел",       intStats);
         printStats("вещественных чисел", floatStats);
         printStats("строк",              strStats);
     }
@@ -103,8 +105,10 @@ public class FilterService {
     }
 
     private void printStats(String label, Statistics stats) {
-        log.info("Статистика для {}:", label);
+        String mode = shortStats ? "Short-stat" : "Full-stat";
+        String flag = shortStats ? "-s" : "-f";
+        log.info("{} ({}) для {}:", mode, flag, label);
         if (shortStats) stats.printShort();
-        else          stats.printFull();
+        else            stats.printFull();
     }
 }

@@ -2,13 +2,16 @@ package com.filefilter.detector;
 
 public class TypeDetector {
     public static FileType detectType(String s) {
-        if (s == null || s.trim().isEmpty()) return FileType.STRING; // Пусть пустая строка считается строкой
+        String str = s.trim();
+        if (str.isEmpty()) {
+            return FileType.STRING;
+        }
         try {
-            Long.parseLong(s);
+            Long.parseLong(str);
             return FileType.INTEGER;
         } catch (NumberFormatException e1) {
             try {
-                Double.parseDouble(s);
+                Double.parseDouble(str);
                 return FileType.FLOAT;
             } catch (NumberFormatException e2) {
                 return FileType.STRING;

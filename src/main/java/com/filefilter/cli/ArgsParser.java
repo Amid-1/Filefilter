@@ -30,7 +30,9 @@ public class ArgsParser {
                     else throw new IllegalArgumentException("После -o должен быть путь к папке!");
                 }
                 default -> {
-                    if (!args[i].startsWith("-")) {
+                    if (args[i].startsWith("-")) {
+                        throw new IllegalArgumentException("Неизвестная опция: " + args[i]);
+                    } else {
                         inputs.add(args[i]);
                     }
                 }
