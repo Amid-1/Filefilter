@@ -18,6 +18,27 @@ import java.util.List;
 
 import static com.filefilter.io.FileWriterService.writeToFile;
 
+/**
+ * Сервис фильтрации содержимого файлов по типу данных с выводом статистики.
+ * <p>
+ * Алгоритм работы:
+ * <ol>
+ *     <li>Читает строки из указанных входных файлов по очереди</li>
+ *     <li>Определяет тип каждой строки: целое число, вещественное число или строка</li>
+ *     <li>Фильтрует данные по категориям (целые, вещественные, строки)</li>
+ *     <li>Ведёт накопление статистики для каждого типа (количество, min/max/сумма/среднее для чисел, длины для строк)</li>
+ *     <li>Записывает каждую категорию в отдельный выходной файл (файл не создаётся, если нет данных этого типа)</li>
+ *     <li>Выводит статистику в консоль в краткой или полной форме (в зависимости от параметров)</li>
+ * </ol>
+ *
+ * <p>
+ * В случае, если ни один входной файл не был успешно прочитан, или все файлы пусты,
+ * выбрасывает {@link com.filefilter.exception.AllFilesFailedException}.
+ * <br>
+ * При ошибках записи файлов выбрасывает {@link java.io.UncheckedIOException}.
+ * <br>
+ * Если список данных для определённого типа пуст — соответствующий файл не создаётся и не записывается.
+ */
 public class FilterService {
     private static final Logger log = LoggerFactory.getLogger(FilterService.class);
 
@@ -26,6 +47,12 @@ public class FilterService {
     private final File outDir;
     private final boolean shortStats;
 
+    /**
+     * @param append режим добавления в существующие файлы (true) или перезаписи (false)
+     * @param prefix префикс для выходных файлов
+     * @param outDir директория для выходных файлов
+     * @param shortStats если true — краткая статистика, иначе — полная
+     */
     public FilterService(boolean append, String prefix, File outDir, boolean shortStats) {
         this.append = append;
         this.prefix = prefix;
@@ -33,6 +60,13 @@ public class FilterService {
         this.shortStats = shortStats;
     }
 
+    /**
+     * Обрабатывает список входных файлов: фильтрует содержимое по типам, пишет результаты и выводит статистику.
+     *
+     * @param inputFiles список имён входных файлов
+     * @throws com.filefilter.exception.AllFilesFailedException если ни один входной файл не удалось прочитать или все они пусты
+     * @throws java.io.UncheckedIOException при ошибках записи выходных файлов
+     */
     public void processFiles(List<String> inputFiles) throws AllFilesFailedException {
         List<String> integers = new ArrayList<>();
         List<String> floats   = new ArrayList<>();
@@ -97,6 +131,11 @@ public class FilterService {
         printStats("строк",              strStats);
     }
 
+    /**
+     * Записывает список строк в файл, если он не пуст.
+     * @param data данные для записи
+     * @param baseName имя выходного файла (без директории и префикса)
+     */
     private void writeCategory(List<String> data, String baseName) {
         if (data.isEmpty()) return;
         File outFile = new File(outDir, prefix + baseName);
@@ -104,6 +143,11 @@ public class FilterService {
         log.info("Записано {} элементов в {}", data.size(), outFile.getAbsolutePath());
     }
 
+    /**
+     * Выводит статистику по переданным данным в консоль (через логгер).
+     * @param label метка (человеко-читаемое название категории)
+     * @param stats объект статистики для данной категории
+     */
     private void printStats(String label, Statistics stats) {
         String mode = shortStats ? "Short-stat" : "Full-stat";
         String flag = shortStats ? "-s" : "-f";

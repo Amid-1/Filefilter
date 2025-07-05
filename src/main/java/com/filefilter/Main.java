@@ -9,9 +9,24 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * Точка входа для утилиты фильтрации содержимого файлов.
+ * <p>
+ * Парсит аргументы командной строки, проверяет корректность параметров, настраивает сервис фильтрации
+ * и запускает обработку файлов.
+ * <br>
+ * Все ошибки и исключительные ситуации логируются и сопровождаются понятным сообщением в консоль.
+ */
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
+    /**
+     * Запуск утилиты фильтрации файлов.
+     * <p>
+     * Аргументы командной строки описаны в README и обрабатываются через {@link com.filefilter.cli.ArgsParser}.
+     *
+     * @param args параметры командной строки
+     */
     public static void main(String[] args) {
         ArgsParser ap;
         try {

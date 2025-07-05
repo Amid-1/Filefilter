@@ -3,6 +3,23 @@ package com.filefilter.statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Реализация статистики для числовых данных.
+ * <p>
+ * Сохраняет следующие метрики:
+ * <ul>
+ *     <li>Количество чисел</li>
+ *     <li>Минимальное и максимальное значение</li>
+ *     <li>Сумму всех значений</li>
+ *     <li>Среднее арифметическое</li>
+ * </ul>
+ * <p>
+ * В случае отсутствия данных (count == 0):
+ * <ul>
+ *     <li>Методы getMin(), getMax(), getAverage() возвращают 0</li>
+ *     <li>printFull() выводит сообщение о том, что данных нет</li>
+ * </ul>
+ */
 public class NumberStatistics implements Statistics {
     private static final Logger log = LoggerFactory.getLogger(NumberStatistics.class);
 

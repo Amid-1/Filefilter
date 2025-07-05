@@ -3,6 +3,21 @@ package com.filefilter.statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Реализация статистики для строковых данных.
+ * <p>
+ * Сохраняет следующие метрики:
+ * <ul>
+ *     <li>Количество строк</li>
+ *     <li>Минимальную и максимальную длину строки</li>
+ * </ul>
+ * <p>
+ * В случае отсутствия данных (count == 0):
+ * <ul>
+ *     <li>Методы getMinLength(), getMaxLength() возвращают 0</li>
+ *     <li>printFull() выводит сообщение о том, что данных нет</li>
+ * </ul>
+ */
 public class StringStatistics implements Statistics {
     private static final Logger log = LoggerFactory.getLogger(StringStatistics.class);
 
