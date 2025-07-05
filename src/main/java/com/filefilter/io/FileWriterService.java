@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
@@ -21,8 +22,13 @@ public class FileWriterService {
                 writer.write(line);
                 writer.newLine();
             }
+        } catch (FileNotFoundException e) {
+            log.error("Файл {} занят другим процессом или недоступен для записи: {}", filePath, e.getMessage());
+            System.err.println("Файл " + filePath + " занят другим процессом или недоступен для записи.");
+            throw new UncheckedIOException("Файл занят другим процессом или недоступен для записи: " + filePath, e);
         } catch (IOException e) {
             log.error("Не удалось записать {} строк в файл {}: {}", lines.size(), filePath, e.getMessage());
+            System.err.println("Не удалось записать в файл " + filePath + ": " + e.getMessage());
             throw new UncheckedIOException(e);
         }
     }

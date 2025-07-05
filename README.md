@@ -89,3 +89,15 @@ java -jar .\target\filefilter-1.0-SNAPSHOT.jar -o .\results -p result_ .\data1.t
 ```bash
 java -jar .\target\filefilter-1.0-SNAPSHOT.jar -o .\results -p result_ .\data1.txt .\data2.txt
 ```
+
+### Примеры сообщения об ошибках
+
+- Ошибка в аргументах: После -o должен быть путь к папке!
+     Использование: java -jar file-filter.jar [-a] [-s|-f] [-o <путь>] [-p <префикс>] <input-files...>
+- Не удалось создать директорию results
+
+- В файле data2.txt не найдено ни одной непустой строки
+
+- Не удалось записать 5 строк в файл results/result_integers.txt: Файл занят другим процессом
+
+- Нет прав на запись в директорию: /some/output/path

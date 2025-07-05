@@ -37,6 +37,13 @@ public class Main {
             return;
         }
 
+        if (!outDir.canWrite()) {
+            log.error("Нет прав на запись в директорию {}", outDir.getAbsolutePath());
+            System.err.println("Нет прав на запись в директорию: " + outDir.getAbsolutePath());
+            System.exit(1);
+            return;
+        }
+
         if (!ap.isAppend()) {
             String[] baseNames = {"integers.txt", "floats.txt", "strings.txt"};
             for (String bn : baseNames) {

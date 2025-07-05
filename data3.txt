@@ -1,0 +1,6 @@
+@"
+-7
+another
+-0.001
+final
+"@ | Set-Content .\data3.txt -Encoding UTF8
