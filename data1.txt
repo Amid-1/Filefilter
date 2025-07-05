@@ -1,6 +1,5 @@
-@"
 42
-hello
+Привет
 3.14
-world
-"@ | Set-Content .\data1.txt -Encoding UTF8
+как
+дела

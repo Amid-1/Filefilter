@@ -1,6 +1,4 @@
-@"
 100
-foo
+Маша
 2.718
-bar
-"@ | Set-Content .\data2.txt -Encoding UTF8
+Катя

@@ -33,7 +33,11 @@ filefilter-1.0-SNAPSHOT.jar
 ### Использование
 
 ```bash
-java -jar ".\target\filefilter-1.0-SNAPSHOT.jar" .\data1.txt .\data2.txt
+java -jar ".\target\filefilter-1.0-SNAPSHOT.jar" .\data1.txt .\data2.txt .\data3.txt
+```
+
+```bash
+java -jar target/filefilter-1.0-SNAPSHOT.jar -a data1.txt data2.txt data3.txt
 ```
 
 ### Параметры:
@@ -82,12 +86,12 @@ java -jar ".\target\filefilter-1.0-SNAPSHOT.jar" `
 ```
 - 4) Запуск с указанием директории для результатов и префиксом имён
 ```bash
-java -jar .\target\filefilter-1.0-SNAPSHOT.jar -o .\results -p result_ .\data1.txt .\data2.txt
+java -jar .\target\filefilter-1.0-SNAPSHOT.jar -o .\results -p result_ .\data1.txt .\data2.txt .\data3.txt
 ```
 
 - 5) Без разбивки на несколько строк
 ```bash
-java -jar .\target\filefilter-1.0-SNAPSHOT.jar -o .\results -p result_ .\data1.txt .\data2.txt
+java -jar .\target\filefilter-1.0-SNAPSHOT.jar -o .\results -p result_ .\data1.txt .\data2.txt .\data3.txt
 ```
 
 ### Примеры сообщения об ошибках
